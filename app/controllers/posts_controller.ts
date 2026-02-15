@@ -23,7 +23,7 @@ export default class PostsController {
   }
 
   async create({ view }: HttpContext) {
-    return view.render('create')
+    return view.render('form')
   }
 
   async store({ request, response }: HttpContext) {
@@ -38,7 +38,7 @@ export default class PostsController {
   async edit({ params, view }: HttpContext) {
     const id = params.id
     const post = posts.find(p => p.id == Number(id))
-    return view.render('edit', { post: post })
+    return view.render('form', { post: post })
   }
 
   async update({ params, request, response }: HttpContext) {

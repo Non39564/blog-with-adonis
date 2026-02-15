@@ -1,18 +1,11 @@
-<! DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ post.title }}</title>
-    </head>
-
-    <body>
-        <h1>{{ post.title }}</h1>
-        <p>{{ post.body }}</p>
-        <a href="/posts">Back</a> &nbsp;
-        <a href="/posts/{{ post.id }}/edit">Edit</a> &nbsp;
-        <a href="/posts/{{ post.id }}/delete">Delete</a>
-    </body>
-
-    </html>
+@component('layouts/master', { title: post.title })
+  @slot('main')
+    <h1 class="ui header">{{ post.title }}</h1>
+    <p>{{ post.body }}</p>
+    <div class="ui buttons">
+      <a class="ui button" href="{{ route('posts.home') }}">Back</a>
+      <a class="ui button" href="{{ route('posts.edit', { id: post.id }) }}">Edit</a>
+      <a class="ui red button" href="{{ route('posts.delete', { id: post.id }) }}">Delete</a>
+    </div>
+  @end
+@end
