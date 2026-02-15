@@ -3,16 +3,33 @@
     <h1 class="ui header">{{ post ? 'Edit Post' : 'New Post' }}</h1>
     <form class="ui form" action="{{ post ? route('posts.update', { id: post.id }) : route('posts.store') }}" method="post">
       {{ csrfField() }}
-      <div class="field">
-        <label>Title</label>
-        <input type="text" name="title" value="{{ post?.title ?? '' }}" required>
+      @!input({ 
+        label: 'Title', 
+        name: 'title', 
+        value: post?.title, 
+        required: true 
+      })
+
+      @!textarea({ 
+        label: 'Body', 
+        name: 'body', 
+        value: post?.body, 
+        rows: 5, 
+        required: true 
+      })
+
+      <div class="ui buttons">
+        @!input({ 
+          type: 'submit', 
+          value: 'Save', 
+          name: 'submit' 
+        })
+
+        @!button({ 
+          label: 'Cancel', 
+          action: route('posts.home') 
+        })
       </div>
-      <div class="field">
-        <label>Body</label>
-        <textarea name="body" rows="5" required>{{ post?.body ?? '' }}</textarea>
-      </div>
-      <input class="ui button" type="submit" value="Save">
-      <a class="ui button" href="{{ route('posts.home') }}">Cancel</a>
     </form>
   @end
 @end
