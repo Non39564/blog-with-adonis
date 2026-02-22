@@ -8,6 +8,6 @@
         </li>
       @endeach
     </ul>
-    <a class="ui button" href="{{ route('posts.create') }}">New</a>
+    @component('button', { href: route('posts.create'), label: "New" })
   @end
 @end
