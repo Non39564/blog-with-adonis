@@ -14,7 +14,9 @@ import Form from '#models/form';
 
 export default class PostsController {
   async index({ view }: HttpContext) {
-    const posts = await Form.all()
+    const posts = await Form.query().withCount('comments', (query) => {
+      query.as('commentsCount')
+    })
     return view.render('posts', { posts: posts })
   }
 

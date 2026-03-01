@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Comment from './comment.js'
 
 export default class Form extends BaseModel {
   @column({ isPrimary: true })
@@ -10,6 +12,11 @@ export default class Form extends BaseModel {
 
   @column()
   declare body: string
+
+  @hasMany(() => Comment, {
+    foreignKey: 'formId',
+  })
+  declare comments: HasMany<typeof Comment>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
