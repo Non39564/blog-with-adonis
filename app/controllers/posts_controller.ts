@@ -47,20 +47,16 @@ export default class PostsController {
   async update({ params, request, response }: HttpContext) {
     const id = params.id
     const post = await Form.find(id)
-    if (post) {
-      post.title = request.input('title')
-      post.body = request.input('body')
-      await post.save()
-    }
+    post!.title = request.input('title')
+    post!.body = request.input('body')
+    await post!.save()
     return response.redirect().toRoute('posts.show', { id: id })
   }
 
   async destroy({ params, response }: HttpContext) {
     const id = params.id
     const post = await Form.find(id)
-    if (post) {
-      await post.delete()
-    }
+    await post?.delete()
     return response.redirect().toRoute('posts.home')
   }
 }
