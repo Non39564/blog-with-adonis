@@ -4,7 +4,7 @@
     <ul class="ui bullet list">
       @each(post in posts)
         <li>
-          <a href="{{ route('posts.show', { id: post.id }) }}">{{ post.title }}</a>
+          <a href="{{ route('posts.show', { id: post.id }) }}">{{ post.title }} [{{ post.$extras.commentsCount }} comment]</a>
         </li>
       @endeach
     </ul>

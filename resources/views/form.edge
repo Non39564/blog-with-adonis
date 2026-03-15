@@ -6,17 +6,28 @@
       @!input({ 
         label: 'Title', 
         name: 'title', 
-        value: post?.title, 
-        required: true 
+        value: old('title') || post?.title || '', 
+        //required: true 
       })
+
+      @inputError('title')
+        @each(message in $messages)
+          <p class="ui negative message">{{ message }}</p>
+        @end
+      @end
 
       @!textarea({ 
         label: 'Body', 
         name: 'body', 
-        value: post?.body, 
+        value: old('body') || post?.body || '', 
         rows: 5, 
-        required: true 
+        //required: true 
       })
+      @inputError('body')
+        @each(message in $messages)
+          <p class="ui negative message">{{ message }}</p>
+        @end
+      @end
 
       <div class="ui buttons">
         @!input({ 

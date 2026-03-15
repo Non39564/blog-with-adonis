@@ -1,0 +1,18 @@
+<form action="{{ route('comments.store', [post.id]) }}" method="post" class="ui form">
+  {{ csrfField() }}
+  <div class="field">
+    <label>Poster</label>
+    <input type="text" name="poster" placeholder="Poster Name" value="{{ old('poster') || '' }}">
+    @inputError('poster')
+      <p class="ui red message">{{ $messages.join(', ') }}</p>
+    @end
+  </div>
+  <div class="field">
+    <label>Comment</label>
+    <textarea name="comment" placeholder="Comment">{{ old('comment') || '' }}</textarea>
+    @inputError('comment')
+      <p class="ui red message">{{ $messages.join(', ') }}</p>
+    @end
+  </div>
+  <button class="ui blue button" type="submit">Submit</button>
+</form>

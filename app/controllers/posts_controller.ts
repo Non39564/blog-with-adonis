@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Form from '#models/form';
+import { createFormValidator } from '#validators/form';
 
 // interface Post {
 //   id: number;
@@ -22,7 +23,10 @@ export default class PostsController {
 
   async show({ params, view }: HttpContext) {
     const id = params.id
-    const post = await Form.find(id)
+    const post = await Form.findOrFail(id)
+    await post.load('comments', (query) => {
+      query.orderBy('createdAt', 'desc')
+    })
     return view.render('detail', { post: post })
   }
 
@@ -31,11 +35,11 @@ export default class PostsController {
   }
 
   async store({ request, response }: HttpContext) {
-    const title = request.input('title')
-    const body = request.input('body')
+    const payload = await request.validateUsing(createFormValidator)
+
     const post = new Form()
-    post.title = title
-    post.body = body
+    post.title = payload.title
+    post.body = payload.body
     await post.save()
     return response.redirect().toRoute('posts.home')
   }
@@ -47,11 +51,12 @@ export default class PostsController {
   }
 
   async update({ params, request, response }: HttpContext) {
+    const payload = await request.validateUsing(createFormValidator)
     const id = params.id
-    const post = await Form.find(id)
-    post!.title = request.input('title')
-    post!.body = request.input('body')
-    await post!.save()
+    const post = await Form.findOrFail(id)
+    post.title = payload.title
+    post.body = payload.body
+    await post.save()
     return response.redirect().toRoute('posts.show', { id: id })
   }
 
