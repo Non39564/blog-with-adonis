@@ -14,7 +14,7 @@ export default class Form extends BaseModel {
   declare body: string
 
   @hasMany(() => Comment, {
-    foreignKey: 'formId',
+    foreignKey: 'postId',
   })
   declare comments: HasMany<typeof Comment>
 
