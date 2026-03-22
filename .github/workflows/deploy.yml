@@ -1,0 +1,44 @@
+
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Connect to VPN
+        run: |
+          sudo apt-get update
+      - name: Prepare VPN config files
+        run: |
+          echo "${{ secrets.VPN_OVPN }}" | base64 -d > sitst-client.ovpn
+          echo "${{ secrets.VPN_CA_CRT }}" | base64 -d > vpn-st_ca.crt
+          echo -e "${{ secrets.VPN_USER }}\n${{ secrets.VPN_PASS }}" > vpn-auth.txt
+          sudo apt-get install -y openvpn
+          sudo openvpn --config sitst-client.ovpn --auth-user-pass vpn-auth.txt --daemon
+          sleep 15
+
+      # - name: Copy files to VM
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.VM_HOST }}
+      #     username: ${{ secrets.VM_USER }}
+      #     password: ${{ secrets.VM_PASS }}
+      #     source: "."
+      #     target: "/path/to/your/app"
+
+      - name: SSH and list files
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          password: ${{ secrets.VM_PASS }}
+          script: |
+            ls -al
