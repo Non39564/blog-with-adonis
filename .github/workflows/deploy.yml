@@ -34,6 +34,13 @@ jobs:
           script: |
             cd blog-with-adonis
             git pull origin main
+            echo "PATH: $PATH"
+            which node || echo 'node not found'
+            which npm || echo 'npm not found'
+            which git || echo 'git not found'
+            node -v || echo 'node -v failed'
+            npm -v || echo 'npm -v failed'
+            git --version || echo 'git --version failed'
             npm install
             node ace migration:fresh --seed
             npm run build
