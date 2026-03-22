@@ -34,6 +34,7 @@ jobs:
           script: |
             cd blog-with-adonis
             git pull origin main
+            export PATH=$PATH:/home/sysadmin/.nvm/versions/node/v22.14.0/bin
             echo "PATH: $PATH"
             which node || echo 'node not found'
             which npm || echo 'npm not found'
