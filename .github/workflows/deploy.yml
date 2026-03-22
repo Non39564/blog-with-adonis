@@ -41,4 +41,5 @@ jobs:
           username: ${{ secrets.VM_USER }}
           password: ${{ secrets.VM_PASS }}
           script: |
-            ls -al
+            cd blog-with-adonis
+            ls
