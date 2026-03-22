@@ -1,7 +1,24 @@
+import Comment from '#models/comment'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
-export default class extends BaseSeeder {
+export default class CommentSeeder extends BaseSeeder {
   async run() {
-    // Write your database queries inside the run method
+    await Comment.createMany([
+      {
+        postId: 1,
+        poster: "Alice",
+        comment: "Great post about AdonisJS!"
+      },
+      {
+        postId: 2,
+        poster: "Bob",
+        comment: "I've been using VueJS for a while now."
+      },
+      {
+        postId: 2,
+        poster: "Charlie",
+        comment: "Looking forward to more AdonisJS content."
+      }
+    ])
   }
 }

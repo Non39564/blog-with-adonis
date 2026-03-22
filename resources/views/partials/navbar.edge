@@ -2,4 +2,18 @@
   <div class="header item">
     <a href="/posts">Blog</a>
   </div>
+  @if(auth.user)
+    <div class="right menu">
+      <div class="ui dropdown item">
+        {{ auth.user.username }} <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="{{ route('users.logout') }}">Logout</a>
+        </div>
+      </div>
+    </div>
+  @else
+    <div class="right menu">
+      <a class="item" href="/login">Login</a>
+    </div>
+  @end
 </div>

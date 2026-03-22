@@ -16,4 +16,7 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
   ],
+  server: {
+    allowedHosts: ['localhost', 's682int690v007.sit.kmutt.ac.th'],
+  },
 })

@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title }}</title>
-  <link rel="stylesheet" type="text/css" href="/semantic/semantic.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/semantic/semantic.min.js"></script>
+  <title>@yield('title', 'Blog')</title>
+  <link rel="stylesheet" href="/semantic/semantic.min.css">
+  <style>
+    @if($slots.style)
+      {{ await $slots.style() }}
+    @end
+  </style>
 </head>
 <body>
-  @include('partials/navbar')
-  <div class="ui container">
-    {{{ await $slots.main() }}}
+  @if($slots.navbar)
+    {{ await $slots.navbar() }}
+  @else
+    @include('partials/navbar')
+  @end
+  <div class="ui container" style="margin-top: 2em;">
+    @yield('content')
   </div>
-
-  @if($slots.modal)
-    {{{ await $slots.modal() }}}
-  @end
-
-  @if($slots.script)
-    {{{ await $slots.script() }}}
-  @end
+  <script src="/semantic/semantic.min.js"></script>
+  <script>
+    $('.ui.dropdown').dropdown();
+  </script>
 </body>
 </html>
