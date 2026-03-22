@@ -13,6 +13,9 @@ export default class Post extends BaseModel {
   @column()
   declare body: string
 
+  @column()
+  declare userId: number
+
   @hasMany(() => Comment)
   declare comments: HasMany<typeof Comment>
 

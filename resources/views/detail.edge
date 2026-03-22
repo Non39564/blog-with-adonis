@@ -26,8 +26,11 @@
     <h1 class="ui header">{{ post.title }}</h1>
     <p>{{ post.body }}</p>
 
-    @!button({label: 'Back', action: route('posts.home')})
-    @!button({label: 'Edit', action: route('posts.edit', {id: post.id})})
-    <button class="ui button delete">Delete</button>
+    {{-- ตรวจสอบว่าล็อกอินแล้วถึงจะแสดงปุ่ม Back, Edit, Delete --}}
+    @if(auth.isAuthenticated)
+        @!button({label: 'Back', action: route('posts.home')})
+        @!button({label: 'Edit', action: route('posts.edit', {id: post.id})})
+        <button class="ui button delete">Delete</button>
+    @end
 
 @end

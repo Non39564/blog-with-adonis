@@ -1,5 +1,22 @@
 <div class="ui grey large menu inverted"> 
-<div class="header item"> 
+    <div class="header item"> 
         <a href="{{ route('posts.home') }}">Blog</a> 
     </div> 
-</div> 
+    
+    @eval(await auth.check())
+    <div class="right menu">
+        @if(auth.isAuthenticated)
+            <div class="ui dropdown item">
+                User: {{ auth.user.username }}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">
+                        <a style="color: black;" href="{{ route('users.logout') }}">
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @end
+    </div>
+</div>

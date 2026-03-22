@@ -10,9 +10,20 @@
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
     <script src="/semantic/semantic.min.js"></script>
+    
+    <style>
+    @if($slots.style)
+        {{{ await $slots.style() }}}
+    @end
+    </style>
 </head>
 <body>
-    @include('partials/navbar')
+    @if($slots.navbar)
+        {{{ await $slots.navbar() }}}
+    @else
+        @include('partials/navbar')
+    @end
+    
     <div class="ui container">
         {{{ await $slots.main() }}}
     </div>
@@ -20,5 +31,9 @@
     @if($slots.script)
         {{{ await $slots.script() }}}
     @end
+    
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
 </body>
 </html>

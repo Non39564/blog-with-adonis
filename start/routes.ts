@@ -9,3 +9,4 @@
 
 import  './routes/post.js'
 import './routes/comment.js'
+import './routes/user.js'
