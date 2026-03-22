@@ -17,6 +17,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    allowedHosts: ['localhost', '']
+    allowedHosts: ['localhost', 's682int690v007.sit.kmutt.ac.th']
   }
 })
