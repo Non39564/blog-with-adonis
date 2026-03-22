@@ -1,6 +1,12 @@
-<div class="field">
-  <label for="{{ name }}">{{ label }}</label>
-  <textarea id="{{ name }}" {{ $props.except(['label', 'value']).toAttrs() }}>
-    {{ value || '' }}
-  </textarea>
-</div>
+{{--
+  label       : field label
+  name        : field name
+  other props : other textarea attributes such as rows, cols 
+                placeholder
+--}}
+<label for="{{name}}">{{label}}</label>
+<textarea id="{{name}}" {{ $props.except(['label','value']).toAttrs() }}>
+@if(value)~
+{{ value }}
+@end~
+</textarea>

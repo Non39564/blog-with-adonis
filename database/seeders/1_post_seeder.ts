@@ -1,18 +1,16 @@
-import Form from '#models/form'
+import Post from '#models/post'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class PostSeeder extends BaseSeeder {
   async run() {
-      await Form.createMany([
+      await Post.createMany([
         {
           title: "Hello AdonisJS",
-          body: "Adonis includes everything you need to create fully functional web app or an API server.",
-          userId: 1
+          body: "Adonis includes everything you need to create fully functional web app or an API server."
         },
         {
           title: "VueJS",
-          body: "Vue is a progressive framework for building user interfaces.",
-          userId: 1
+          body: "Vue is a progressive framework for building user interfaces."
         }
       ])
   }

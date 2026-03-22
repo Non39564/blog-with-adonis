@@ -1,14 +1,19 @@
-@component('layouts/master', { title: "Posts" })
-  @slot('main')
+@layouts.master({title: 'Posts'}) 
+    
     <h1 class="ui header">Posts</h1>
     <ul class="ui bullet list">
-      @each(post in posts)
-        <li>
-          <a href="{{ route('posts.show', { id: post.id }) }}">{{ post.title }} [{{ post.$extras.commentsCount }} comment]</a>
-        </li>
-      @endeach
+        @each(post in posts)
+            <li>
+                <a href="{{ route('posts.show', {id: post.id}) }}">
+                {{ post.title }}
+                </a>
+                &nbsp;&nbsp;[ <a href="{{ route('comments.index',{ postId: post.id}) }}">
+                {{ post.$extras.commentsCount }} comments </a> ]
+            </li>
+        @end
     </ul>
-    @component('button', { href: route('posts.create'), label: "New" })
-    @endcomponent
-  @endslot
-@endcomponent
+    @!button({ label: 'New', action: route('posts.create') })
+    
+@end
+
+ 

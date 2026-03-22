@@ -15,8 +15,8 @@ export default class Comment extends BaseModel {
   declare comment: string
 
   @computed()
-  get postedOn() {
-    return this.createdAt.toFormat('dd LLL yyyy HH:mm')
+  get postedOn(){
+    return this.createdAt.toFormat("dd LLL yyyy HH:mm")
   }
 
   @column.dateTime({ autoCreate: true })

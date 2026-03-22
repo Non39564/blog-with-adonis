@@ -1,8 +1,11 @@
-<div class="field">
-  @if(label)
-    <label for="{{ name }}">{{ label }}</label>
-  @end
-  <input id="{{ name }}" 
-    class="{{ type === 'submit' ? 'ui button' : '' }}" 
-    {{ $props.except(['label']).toAttrs() }}>
-</div>
+{{--
+  label       : field label
+  name        : field name
+  other props : other input attributes such as type, size, placeholder
+--}}
+ @if(type=="submit")
+    <input class="ui button" {{ $props.except(['label']).toAttrs() }}>
+ @else
+    <label for="{{name}}">{{label}}</label>
+    <input id="{{name}}" {{ $props.except(['label']).toAttrs() }}>
+@end 

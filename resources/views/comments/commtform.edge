@@ -1,18 +1,32 @@
-<form action="{{ route('comments.store', [post.id]) }}" method="post" class="ui form">
-  {{ csrfField() }}
-  <div class="field">
-    <label>Poster</label>
-    <input type="text" name="poster" placeholder="Poster Name" value="{{ old('poster') || '' }}">
-    @inputError('poster')
-      <p class="ui red message">{{ $messages.join(', ') }}</p>
-    @end
-  </div>
-  <div class="field">
-    <label>Comment</label>
-    <textarea name="comment" placeholder="Comment">{{ old('comment') || '' }}</textarea>
-    @inputError('comment')
-      <p class="ui red message">{{ $messages.join(', ') }}</p>
-    @end
-  </div>
-  <button class="ui blue button" type="submit">Submit</button>
+<form class="ui form" 
+       action="{{ route('comments.store', { postId: post.id }) }}"
+       method="post">
+
+    {{ csrfField() }}
+    <div class="field">
+        @if(flashMessages.has("poster"))
+        @!input({ label: 'Your name', name: 'poster', type: 'text', placeholder: 'Your name', value: old('poster')??'' })
+        @else
+        @!input({ label: 'Your name', name: 'poster', type: 'text', placeholder: 'Your name' })
+        @end
+        @inputError('poster')
+            @each(message in $messages)
+            <div class="ui negative message">{{message}}</div>
+            @end
+        @end
+    </div>
+    <div class="field">
+        @if(flashMessages.has("comment"))
+        @!textarea({ label: 'Comment', name: 'comment', placeholder: 'Your comment', value: old('comment')??'' })
+        @else
+        @!textarea({ label: 'Comment', name: 'comment', placeholder: 'Your comment' })
+        @end 
+        @inputError('comment')
+            @each(message in $messages)
+            <div class="ui negative message">{{message}}</div>
+            @end
+        @end
+    </div>
+    @!input({ type: 'submit', value: 'Submit' })
+    
 </form>

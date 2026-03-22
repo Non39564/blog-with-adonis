@@ -1,0 +1,64 @@
+@layouts.master({title: post?"Edit Post":"New Post"}) 
+    @unless(post)
+        <h1 class="ui header">New post</h1>
+    @else
+        <h1 class="ui header">Edit post</h1>
+    @end
+    <form class="ui form" action="{{ post?route('posts.update', {id: post.id}):route('posts.store') }}" method="post">
+        {{ csrfField()}}
+        <div class="field">
+            @if(flashMessages.has('title'))
+            @!input({label: 'Title', type: 'text', name: 'title', size: 50, placeholder: 'Type title here', 
+                    /*required: true,*/ value: old('title')??''})
+            @else
+            @!input({label: 'Title', type: 'text', name: 'title', size: 50, placeholder: 'Type title here', 
+                    /*required: true,*/ value: post?post.title:''})
+            @end
+            @inputError('title')
+                @each(message in $messages)
+                <div class="ui negative message">{{ message }}</div>
+                @end 
+            @end
+        </div>
+        <div class="field">
+            @if(flashMessages.has('body'))         
+            @!textarea({label: 'Body', name: 'body', rows: 5, cols: 50, placeholder: 'Please type your story here', 
+                        /*required: true,*/ value: old('body')??''})
+            @else
+            @!textarea({label: 'Body', name: 'body', rows: 5, cols: 50, placeholder: 'Please type your story here', 
+                        /*required: true,*/ value: post?post.body:''})    
+            @end
+            @inputError('body')
+                @each(message in $messages)
+                <div class="ui negative message">{{ message }}</div>
+                @end
+            @end 
+        </div>
+        @!input({type: 'submit', name: 'save', value: 'Save'})
+        &nbsp;
+        @!button({ label: 'Cancel', action: route('posts.home') })
+        {{-- <div class="ui error message"></div> --}}
+    </form>
+
+    {{-- @slot('script')
+        <script>
+            $('.ui.form').form({
+                fields: {
+                    title: {
+                        identifier: 'title',
+                        rules: [
+                            {type: 'empty', prompt: 'Please enter the post {identifier}.'}
+                        ]
+                    },
+                    body: {
+                        identifier: 'body',
+                        rules: [
+                            {type: 'empty', prompt: 'The {identifier} should be provided.'}
+                        ]
+                    }
+                }
+            })
+        </script>
+    @end --}}
+@end
+

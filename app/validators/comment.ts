@@ -1,11 +1,10 @@
 import vine from '@vinejs/vine'
 
-/**
- * Validates the comment creation action
- */
-export const createCommentValidator = vine.compile(
-  vine.object({
+const schema =  vine.object({
     poster: vine.string().maxLength(15),
-    comment: vine.string().trim().minLength(1),
-  })
-)
+    comment: vine.string()
+})
+
+export const createCommentValidator = vine.compile(schema)
+
+  

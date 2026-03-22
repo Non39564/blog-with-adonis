@@ -1,73 +1,33 @@
-@component('layouts/master', { title: post.title })
-
-  @slot('main')
-    <div class="ui container">
-      {{--  Displays post content  --}}
-      <h1 class="ui header">{{ post.title }}</h1>
-      <p>{{ post.body }}</p> 
-
-      {{--  Displays existing comments  --}}
-      <div class="ui comments">
-          <h3 class="ui dividing header">Comments</h3>
-          @each(comment in post.comments)
-              <div class="comment">
-                  <div class="content">
-                      <a class="author">{{ comment.poster }}</a>
-                      <div class="metadata">
-                          <span class="date">{{ comment.postedOn }}</span>
-                      </div>
-                      <div class="text">
-                          {{ comment.comment }}
-                      </div>
-                  </div>
-              </div>
-          @endeach
-      </div>
-
-      {{--  Comment submission form  --}}
-      @include('comments/commtform')
-
-      <div class="ui buttons">
-          @!button({ label: 'Back', action: route('posts.home') })
-          @!button({ label: 'Edit', action: route('posts.edit', { id: post.id }) })
-          <button class="ui red button delete">Delete</button>
-      </div>
-    </div>
-  @end
-
-  @slot('modal')
-    @alert({
-        title: "Delete?", 
-        id: "alert-modal"
-    })
-      @slot('main')
-        <p>Do you want to delete this post?</p>
-      @end
-      @slot('actions')
-        <div class="ui green approve button">Delete</div>
-        <div class="ui red deny button">Cancel</div>
-      @end
+@layouts.master({title: post.title})
+    @slot('script')
+        <script>
+        $(document).ready(function(){
+            $('.ui.button.delete').click(function(){
+                $('.ui.modal')
+                    .modal({
+                        closable: false, 
+                        onApprove: function(){
+                            window.location.href ="{{ route('posts.delete',{id: post.id})}}" ;
+                        }
+                    }).modal('show') ;
+                }) ;
+            }) ;
+        </script>
     @end
-  @end
 
-  @slot('script')
-    <script>
-      $(document).ready(function(){
-        console.log('Modal element:', $('#alert-modal').length);
-        
-        // Initialize modal first
-        $('#alert-modal').modal({
-          closable: false,
-          onApprove: function(){
-            window.location.href = "{{ route('posts.delete', { id: post.id }) }}";
-          }
-        });
-        
-        // Attach click handler
-        $('.ui.button.delete').click(function(){
-          $('#alert-modal').modal('show');
-        });
-      });
-    </script>
-  @end
+    @alert({title: 'Delete?'}) 
+        @slot('actions')
+            <div class="ui green approve button">Delete</div>
+            <div class="ui red deny button">Cancel</div>
+        @end
+        <p>Do you want to delete this post?</p>
+    @end
+
+    <h1 class="ui header">{{ post.title }}</h1>
+    <p>{{ post.body }}</p>
+
+    @!button({label: 'Back', action: route('posts.home')})
+    @!button({label: 'Edit', action: route('posts.edit', {id: post.id})})
+    <button class="ui button delete">Delete</button>
+
 @end
