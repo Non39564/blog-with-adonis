@@ -23,18 +23,9 @@ jobs:
           echo -e "${{ secrets.VPN_USER }}\n${{ secrets.VPN_PASS }}" > vpn-auth.txt
           sudo apt-get install -y openvpn
           sudo openvpn --config sitst-client.ovpn --auth-user-pass vpn-auth.txt --daemon
-          sleep 15
+          sleep 10
 
-      # - name: Copy files to VM
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.VM_HOST }}
-      #     username: ${{ secrets.VM_USER }}
-      #     password: ${{ secrets.VM_PASS }}
-      #     source: "."
-      #     target: "/path/to/your/app"
-
-      - name: SSH and list files
+      - name: SSH pull and build
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.VM_HOST }}
@@ -42,4 +33,13 @@ jobs:
           password: ${{ secrets.VM_PASS }}
           script: |
             cd blog-with-adonis
-            ls
+            git pull origin main
+            npm install
+            node ace migration:fresh --seed
+            npm run build
+            cp .env.example .env
+            node ace generate:key
+            cd build
+            cp ../.env .env
+            npm ci --omit="dev"
+            node bin/server.js
