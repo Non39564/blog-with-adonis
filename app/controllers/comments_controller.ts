@@ -18,7 +18,7 @@ export default class CommentsController {
         const payload = await request.validateUsing(createCommentValidator)
 
         if (payload.poster && payload.comment) {
-            const comment = await Comment.create({
+            await Comment.create({
                 postId: postId,
                 poster: payload.poster,
                 comment: payload.comment
