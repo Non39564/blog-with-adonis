@@ -53,4 +53,5 @@ jobs:
             cd build
             cp ../.env .env
             npm ci --omit="dev"
-            node bin/server.js
+            npm install -g pm2
+            pm2 restart adonis-blog || pm2 start bin/server.js --name adonis-blog

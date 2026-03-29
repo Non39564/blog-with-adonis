@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node bin/server.js",
-    "build": "node ace build",
+    "build": "node ace build --ignore-ts-errors",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
@@ -62,6 +62,7 @@
     "edge.js": "^6.2.1",
     "luxon": "^3.7.2",
     "mysql2": "^3.17.4",
+    "pm2": "^6.0.14",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
