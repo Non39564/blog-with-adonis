@@ -1,4 +1,4 @@
-@layouts.master() 
+@layouts.master({title: 'Login'}) 
   @slot('style') 
     .ui.container { 
       margin-top: 100px; 
@@ -9,6 +9,13 @@
   @!slot('navbar')
 
   <h1 class="ui header aligned center">Login</h1> 
+  @flashMessage('error')
+  <div class="ui negative message">
+    <i class="close icon"></i>
+    <div class="header">Error!</div>
+    <p>{{$message}}</p>
+  </div>
+  @end
   <form class="ui form" action="{{ route('users.login') }}" method="post"> 
     {{ csrfField() }} 
     <div class="field"> 
@@ -19,4 +26,13 @@
     </div> 
     @!input({type: 'submit', value: 'Login'}) 
   </form> 
+
+  @slot('script')
+  <script>
+    $('.message .close').on('click', function(){
+      $(this).closest('.message').transition('fade') ;
+    })
+  </script>
+  @end
+
 @end

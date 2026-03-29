@@ -3,9 +3,10 @@ import Post from '#models/post'
 import { createPostValidator } from '#validators/post'
 
 export default class PostsController {
-    async index({ auth, view }: HttpContext) {
+    async index({ auth, session, view }: HttpContext) {
         // ดึงข้อมูล user ที่ล็อกอิน
-        const user = auth.getUserOrFail() 
+        // const user = auth.getUserOrFail() 
+        const user = session.get('user')
         
         const posts = await Post.query()
             .where('userId', user.id) // กรองเอาเฉพาะโพสต์ของ user นี้
@@ -27,9 +28,10 @@ export default class PostsController {
         return view.render('post')
     }
 
-    async store({ auth, request, response }: HttpContext) {
+    async store({ auth, session, request, response }: HttpContext) {
         // ดึงข้อมูล user ที่ล็อกอิน
-        const user = auth.getUserOrFail() 
+        // const user = auth.getUserOrFail() 
+        const user = session.get('user')
         
         // ใช้ validateUsing ตาม Lab 9
         const payload = await request.validateUsing(createPostValidator)
@@ -43,9 +45,10 @@ export default class PostsController {
         response.redirect().toRoute('posts.home')
     }
 
-    async edit({ auth, params, view }: HttpContext) {
+    async edit({ auth, session, params, view }: HttpContext) {
         const id = params.id 
-        const user = auth.getUserOrFail() //
+        // const user = auth.getUserOrFail() //
+        const user = session.get('user')
         
         // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
         const post = await Post.query()
@@ -56,9 +59,10 @@ export default class PostsController {
         return view.render('post', { post: post })
     }
 
-    async update({ auth, params, request, response }: HttpContext) {
+    async update({ auth, session, params, request, response }: HttpContext) {
         const id = params.id 
-        const user = auth.getUserOrFail() // 
+        // const user = auth.getUserOrFail() // 
+        const user = session.get('user')
         
         // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
         const post = await Post.query()
@@ -76,9 +80,10 @@ export default class PostsController {
         response.redirect().toRoute('posts.show', {id: id})
     }
 
-    async destroy({ auth, params, response }: HttpContext) {
+    async destroy({ auth, session, params, response }: HttpContext) {
         const id = params.id 
-        const user = auth.getUserOrFail() // 
+        // const user = auth.getUserOrFail() // 
+        const user = session.get('user')
         
         // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
         const post = await Post.query()

@@ -15,6 +15,6 @@ router.group(() => {
     router.get('/posts/:id/delete', [PostsController, 'destroy']).as('posts.delete')
     router.post('/posts', [PostsController, 'store']).as('posts.store')
     router.post('/posts/:id/update', [PostsController, 'update']).as('posts.update')
-}).use(middleware.auth())
+}).use(middleware.myAuth())
 
 router.get('/posts/:id', [PostsController, 'show']).as('posts.show')

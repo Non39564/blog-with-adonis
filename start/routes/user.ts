@@ -7,5 +7,5 @@ router.get('/login', ({view}:HttpContext) => {
   return view.render('login')
 }).use(middleware.guest()).as('login')
 
-router.post('/login', [UsersController, 'login']).as('users.login')
-router.get('/logout', [UsersController, 'logout']).as('users.logout')
+router.post('/login', [UsersController, 'login2']).as('users.login')
+router.get('/logout', [UsersController, 'logout2']).as('users.logout')

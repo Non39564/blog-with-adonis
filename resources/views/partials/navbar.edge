@@ -3,11 +3,12 @@
         <a href="{{ route('posts.home') }}">Blog</a> 
     </div> 
     
-    @eval(await auth.check())
     <div class="right menu">
-        @if(auth.isAuthenticated)
+        {{-- @if(auth.isAuthenticated) --}}
+        @if(session.get('user'))
             <div class="ui dropdown item">
-                User: {{ auth.user.username }}
+                {{-- User : {{ auth.user.username }} --}}
+                User : &nbsp;&nbsp; {{ session.get('user').username }}
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div class="item">
