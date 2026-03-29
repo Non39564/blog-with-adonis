@@ -36,15 +36,12 @@ jobs:
               git clone https://github.com/${{ github.repository }}.git
             fi
             cd blog-with-adonis
-            git pull origin main
-            export PATH=$PATH:/home/sysadmin/.nvm/versions/node/v22.14.0/bin
-            echo "PATH: $PATH"
-            which node || echo 'node not found'
-            which npm || echo 'npm not found'
-            which git || echo 'git not found'
-            node -v || echo 'node -v failed'
-            npm -v || echo 'npm -v failed'
-            git --version || echo 'git --version failed'
+            git fetch origin
+            git reset --hard origin/main
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            echo "Node path: $(which node)"
+            echo "Node version: $(node -v)"
             npm install
             node ace migration:fresh --seed
             npm run build
