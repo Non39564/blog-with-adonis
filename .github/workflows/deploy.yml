@@ -32,6 +32,9 @@ jobs:
           username: ${{ secrets.VM_USER }}
           password: ${{ secrets.VM_PASS }}
           script: |
+            if [ ! -d "blog-with-adonis" ]; then
+              git clone https://github.com/${{ github.repository }}.git
+            fi
             cd blog-with-adonis
             git pull origin main
             export PATH=$PATH:/home/sysadmin/.nvm/versions/node/v22.14.0/bin
