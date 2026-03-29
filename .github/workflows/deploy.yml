@@ -46,6 +46,7 @@ jobs:
             node ace migration:fresh --seed
             npm run build
             cp .env.example .env
+            sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' .env
             node ace generate:key
             cd build
             cp ../.env .env
