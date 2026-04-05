@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
+import { registerUserValidator } from '#validators/user'
 
 export default class UsersController {
   async login({auth, request, response}: HttpContext) {
@@ -38,5 +39,26 @@ export default class UsersController {
   async logout2({session, response}: HttpContext) {
     session.clear()
     response.redirect().toRoute('login')
+  }
+
+  async register({session, request, response}:HttpContext){
+    const payload = await request.validateUsing(registerUserValidator)
+    const user = await User.create({username: payload.username, password: payload.password})
+
+    if(user){
+        session.flash('message', {
+            type: 'positive',
+            message: 'The user is register successfully. Please use username and password to log in.'
+        })
+        response.redirect().toRoute('login')
+    }
+  }
+
+  async verify({ request, response }: HttpContext) {
+    const username = request.input('username')
+    const user = await User.findBy('username', username)
+    if (user) {
+      return response.status(203).send('The username is already used!')
+    }
   }
 }

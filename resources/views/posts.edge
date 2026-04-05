@@ -1,19 +1,87 @@
 @layouts.master({title: 'Posts'}) 
     
     <h1 class="ui header">Posts</h1>
-    <ul class="ui bullet list">
+    <div class="ui bulleted list" id="postlist">
+        {{ csrfField() }}
         @each(post in posts)
-            <li>
+            <div class="item">
+                <span class="deleteshow" style="display: none;">
+                    <input type="checkbox" class="delitem" id="{{post.id}}">
+                    &nbsp;&nbsp;
+                </span>
                 <a href="{{ route('posts.show', {id: post.id}) }}">
                 {{ post.title }}
                 </a>
                 &nbsp;&nbsp;[ <a href="{{ route('comments.index',{ postId: post.id}) }}">
                 {{ post.$extras.commentsCount }} comments </a> ]
-            </li>
+            </div>
         @end
-    </ul>
+    </div>
     @!button({ label: 'New', action: route('posts.create') })
-    
+    @!button({ id: 'delbutton', label: 'Delete(s)' })
+    <span class="deleteshow" style="display: none;">
+        &nbsp;&nbsp;
+        <input type="checkbox" id="selectall">
+        <label for="selectall">Select All</label>
+    </span>
+
+    @slot('script')
+        <script>
+            $('#delbutton').on('click', function() {
+                console.log('click')
+                let hasBullet = $('#postlist').hasClass('bulleted') ;
+                // toggle bullet
+                if(hasBullet) {
+                    $('#postlist').removeClass('bulleted');
+                } else {
+                    $('#postlist').addClass('bulleted');
+                }
+                // toggle delete checkbox
+                $('.deleteshow').each(function() {
+                    if(hasBullet) {
+                        $(this).css('display', 'inline'); // $(this).hide() also works
+                    } else {
+                        $(this).css('display', 'none'); // $(this).show() also works
+                    }
+                })
+                //count checked items
+                let delcount = $('.delitem:checked').length ;
+                if(delcount > 0) {
+                    let postIds = [];
+                    $('.delitem:checked').each(function() {
+                        let id = $(this).attr('id');
+                        postIds.push(id);
+                    });
+                    console.log(postIds);
+                    // send delete request to server
+                    $.ajax({
+                        url: '{{ route("posts.deleteAll") }}',
+                        method: 'POST',
+                        data: {
+                            postIds: postIds,
+                        },
+                        headers: {
+                            'x-csrf-token': $('[name=_csrf]').val()
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log(response);
+                            location.reload(); // Refresh the page to reflect changes
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                            alert('An error occurred while deleting posts.');
+                        }
+                    });
+                }
+            });
+            // toggle checked in checkbox
+            $('#selectall').click(function() {
+                let isChecked = $(this).prop('checked'); // $(this).is(':checked') also works
+                $('.delitem').prop('checked', isChecked);
+            });
+        </script>
+    @end
 @end
 
  

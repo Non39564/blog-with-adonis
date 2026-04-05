@@ -1,0 +1,62 @@
+@layouts.master({title: 'Register'})
+  @slot('style')
+    .ui.container {
+      margin-top: 100px ;
+      width: 30% ;
+    }
+  @end
+
+  @!slot('navbar')
+
+  <h1 class="ui header aligned center">Register</h1>
+  <form class="ui form" action="{{ route('users.register') }}" method="post">
+    {{ csrfField() }}
+    <div class="field">
+      @flashMessage('errors')
+        @!input({label: 'Username', type: 'text', name: 'username', value: old('username')})
+      @else
+        @!input({label: 'Username', type: 'text', name: 'username'})
+      @end
+      @inputError('username')
+        @each(message in $messages)
+          <div class="ui negative message">{{message}}</div>
+        @end
+      @end
+    </div>
+    <div class="field">
+      @!input({label: 'Password', type: 'password', name: 'password'})
+      @inputError('password')
+        @each(message in $messages)
+          <div class="ui negative message">{{message}}</div>
+        @end
+      @end
+    </div>
+    <div class="field">
+      @!input({label: 'Confirm Password', type: 'password', name: 'password_confirmation'})
+    </div>
+    @!input({type: 'submit', value: 'Register'})
+  </form>
+
+  @slot('script')
+  <script>
+    $('[name="username"]').on('change', function() {
+      let username = $(this).val();
+      $('#username-ajax-error').remove(); // Clear previous error
+      if (username) {
+        $.ajax({
+          url: '{{ route("users.verify") }}',
+          method: 'POST',
+          data: { username: username },
+          headers: { 'x-csrf-token': $('[name=_csrf]').val() },
+          success: function(response, textStatus, xhr) {
+            if (xhr.status === 203) {
+              $('<div class="ui negative message" id="username-ajax-error">' + response + '</div>').insertAfter($('[name="username"]'));
+            }
+          }
+        });
+      }
+    });
+  </script>
+  @end
+
+@end

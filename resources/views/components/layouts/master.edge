@@ -25,6 +25,9 @@
     @end
     
     <div class="ui container">
+        @flashMessage("message")
+            <div class="ui {{$message.type}} message">{{$message.message}}</div>
+        @end
         {{{ await $slots.main() }}}
     </div>
 
