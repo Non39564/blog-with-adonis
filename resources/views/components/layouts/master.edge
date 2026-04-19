@@ -26,7 +26,10 @@
     
     <div class="ui container">
         @flashMessage("message")
-            <div class="ui {{$message.type}} message">{{$message.message}}</div>
+            <div class="ui {{$message.type}} message">
+                <i class="close icon"></i>
+                <p>{{ $message.message }}</p>
+            </div>
         @end
         {{{ await $slots.main() }}}
     </div>
@@ -37,6 +40,9 @@
     
     <script>
         $('.ui.dropdown').dropdown();
+        $('.message .close').on('click', function() {
+            $(this).closest('.message').transition('fade');
+        });
     </script>
 </body>
 </html>

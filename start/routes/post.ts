@@ -19,4 +19,4 @@ router.group(() => {
 // }).use(middleware.myAuth())
 }).use(middleware.auth())
 
-router.get('/posts/:id', [PostsController, 'show']).as('posts.show')
+router.get('/posts/:id', [PostsController, 'show']).as('posts.show').use(middleware.silentAuth())

@@ -4,94 +4,84 @@ import { createPostValidator } from '#validators/post'
 
 export default class PostsController {
     async index({ auth, view }: HttpContext) {
-        // ดึงข้อมูล user ที่ล็อกอิน
-        const user = auth.getUserOrFail() 
-        // const user = session.get('user')
-        
+        const user = auth.getUserOrFail()
+
         const posts = await Post.query()
-            .where('userId', user.id) // กรองเอาเฉพาะโพสต์ของ user นี้
+            .where('userId', user.id)
             .withCount('comments', (query) => {
                 query.as('commentsCount')
-            }).orderBy('id', 'desc') // เรียงลำดับโพสต์ล่าสุด
-            
+            }).orderBy('id', 'desc')
+
         return view.render('posts', { posts: posts })
     }
 
     async show({ params, view }: HttpContext) {
-        const id = params.id 
+        const id = params.id
         const post = await Post.find(id)
 
         return view.render('detail', { post: post })
     }
 
-    async create({ view }: HttpContext) {
+    async create({ bouncer, view }: HttpContext) {
+        await bouncer.with('PostPolicy').authorize('create')
         return view.render('post')
     }
 
-    async store({ auth, request, response }: HttpContext) {
-        // ดึงข้อมูล user ที่ล็อกอิน
-        const user = auth.getUserOrFail() 
-        // const user = session.get('user')
-        
-        // ใช้ validateUsing ตาม Lab 9
+    async store({ bouncer, auth, request, response }: HttpContext) {
+        await bouncer.with('PostPolicy').authorize('create')
+
+        const user = auth.getUserOrFail()
         const payload = await request.validateUsing(createPostValidator)
 
         const post = new Post()
-        post.userId = user.id // บันทึก userId ลงในโพสต์ด้วย
-        post.title = payload.title 
-        post.body = payload.body 
+        post.userId = user.id
+        post.title = payload.title
+        post.body = payload.body
         await post.save()
 
         response.redirect().toRoute('posts.home')
     }
 
-    async edit({ auth, params, view }: HttpContext) {
-        const id = params.id 
-        const user = auth.getUserOrFail() //
-        // const user = session.get('user')
-        
-        // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
+    async edit({ bouncer, params, view }: HttpContext) {
+        const id = params.id
         const post = await Post.query()
-            .where('userId', user.id)
+            // .where('userId', user.id)
             .where('id', id)
-            .first() // ใช้ first() เพื่อให้คืนค่าเป็น Object เดียว
+            .first()
+
+        await bouncer.with('PostPolicy').authorize('edit', post!)
 
         return view.render('post', { post: post })
     }
 
-    async update({ auth, params, request, response }: HttpContext) {
-        const id = params.id 
-        const user = auth.getUserOrFail() // 
-        // const user = session.get('user')
-        
-        // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
+    async update({ bouncer, params, request, response }: HttpContext) {
+        const id = params.id
         const post = await Post.query()
-            .where('userId', user.id)
+            // .where('userId', user.id)
             .where('id', id)
             .first()
 
-        // ใช้ validateUsing เหมือนตอน create
+        await bouncer.with('PostPolicy').authorize('update', post!)
+
         const payload = await request.validateUsing(createPostValidator)
 
-        post!.title = payload.title 
-        post!.body = payload.body 
-        await post?.save()  
+        post!.title = payload.title
+        post!.body = payload.body
+        await post?.save()
 
-        response.redirect().toRoute('posts.show', {id: id})
+        response.redirect().toRoute('posts.show', { id: id })
     }
 
-    async destroy({ auth, params, response }: HttpContext) {
-        const id = params.id 
-        const user = auth.getUserOrFail() // 
-        // const user = session.get('user')
-        
-        // ค้นหาโพสต์ที่เป็นของ user คนนี้เท่านั้น
+    async destroy({ bouncer, params, response }: HttpContext) {
+        const id = params.id
         const post = await Post.query()
-            .where('userId', user.id)
+            // .where('userId', user.id)
             .where('id', id)
             .first()
 
-        await post?.delete()
+        await bouncer.with('PostPolicy').authorize('delete', post!)
+
+        await post!.delete()
 
         response.redirect().toRoute('posts.home')
     }

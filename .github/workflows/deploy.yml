@@ -16,12 +16,12 @@ jobs:
       - name: Connect to VPN
         run: |
           sudo apt-get update
+          sudo apt-get install -y openvpn
       - name: Prepare VPN config files
         run: |
           echo "${{ secrets.VPN_OVPN }}" | base64 -d > sitst-client.ovpn
           echo "${{ secrets.VPN_CA_CRT }}" | base64 -d > vpn-st_ca.crt
           echo -e "${{ secrets.VPN_USER }}\n${{ secrets.VPN_PASS }}" > vpn-auth.txt
-          sudo apt-get install -y openvpn
           sudo openvpn --config sitst-client.ovpn --auth-user-pass vpn-auth.txt --daemon
           sleep 10
 
@@ -43,13 +43,15 @@ jobs:
             echo "Node path: $(which node)"
             echo "Node version: $(node -v)"
             npm install
-            node ace migration:fresh --seed
             npm run build
-            cp .env.example .env
-            sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' .env
-            node ace generate:key
+            if [ ! -f ".env" ]; then
+              cp .env.example .env
+              sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' .env
+              node ace generate:key
+            fi
             cd build
             cp ../.env .env
             npm ci --omit="dev"
+            node ace migration:run --force
             npm install -g pm2
             pm2 restart adonis-blog || pm2 start bin/server.js --name adonis-blog

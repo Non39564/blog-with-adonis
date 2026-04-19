@@ -61,4 +61,13 @@ export default class UsersController {
       return response.status(203).send('The username is already used!')
     }
   }
+
+  async destroy({ params, response }: HttpContext) {
+    const userId = params.id
+    const user = await User.find(userId)
+    if (user) {
+      await user.delete()
+    }
+    response.redirect().toRoute('posts.home')
+  }
 }

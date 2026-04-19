@@ -1,36 +1,36 @@
 @layouts.master({title: post.title})
-    @slot('script')
-        <script>
-        $(document).ready(function(){
-            $('.ui.button.delete').click(function(){
-                $('.ui.modal')
-                    .modal({
-                        closable: false, 
-                        onApprove: function(){
-                            window.location.href ="{{ route('posts.delete',{id: post.id})}}" ;
-                        }
-                    }).modal('show') ;
-                }) ;
-            }) ;
-        </script>
-    @end
+@slot('script')
+<script>
+    $(document).ready(function () {
+        $('.ui.button.delete').click(function () {
+            $('.ui.modal')
+                .modal({
+                    closable: false,
+                    onApprove: function () {
+                        window.location.href = "{{ route('posts.delete',{id: post.id})}}";
+                    }
+                }).modal('show');
+        });
+    });
+</script>
+@end
 
-    @alert({title: 'Delete?'}) 
-        @slot('actions')
-            <div class="ui green approve button">Delete</div>
-            <div class="ui red deny button">Cancel</div>
-        @end
-        <p>Do you want to delete this post?</p>
-    @end
+@alert({title: 'Delete?'})
+@slot('actions')
+<div class="ui green approve button">Delete</div>
+<div class="ui red deny button">Cancel</div>
+@end
+<p>Do you want to delete this post?</p>
+@end
 
-    <h1 class="ui header">{{ post.title }}</h1>
-    <p>{{ post.body }}</p>
+<h1 class="ui header">{{ post.title }}</h1>
+<p>{{ post.body }}</p>
 
-    {{-- ตรวจสอบว่าล็อกอินแล้วถึงจะแสดงปุ่ม Back, Edit, Delete --}}
-    @if(auth.isAuthenticated)
-        @!button({label: 'Back', action: route('posts.home')})
-        @!button({label: 'Edit', action: route('posts.edit', {id: post.id})})
-        <button class="ui button delete">Delete</button>
-    @end
+{{-- ตรวจสอบว่าเป็นเจ้าของโพสต์ถึงจะแสดงปุ่ม Edit, Delete --}}
+@can('PostPolicy.edit', post)
+@!button({label: 'Back', action: route('posts.home')})
+@!button({label: 'Edit', action: route('posts.edit', {id: post.id})})
+<button class="ui button delete">Delete</button>
+@end
 
 @end

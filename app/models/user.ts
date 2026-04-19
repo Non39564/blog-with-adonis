@@ -5,6 +5,7 @@ import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Post from './post.js'
+import Role from '../contracts/Role.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username'],
@@ -23,6 +24,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(()=>Post)
   declare posts: HasMany<typeof Post>
+
+  @column()
+  declare role: Role
 
   @column({ serializeAs: null })
   declare password: string
