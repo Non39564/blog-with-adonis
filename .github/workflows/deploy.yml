@@ -52,6 +52,7 @@ jobs:
             cd build
             cp ../.env .env
             npm ci --omit="dev"
-            node ace migration:fresh --seed
+            node ace migration:run --force
+            node ace db:seed || true
             npm install -g pm2
             pm2 restart adonis-blog || pm2 start bin/server.js --name adonis-blog
