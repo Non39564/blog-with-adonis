@@ -1,15 +1,25 @@
 @layouts.master({title: post.title})
 
-    <h1 class="ui header">{{ post.title }}</h1>
-    <p>{{ post.body }}</p>
-    <hr>
-    <h3 class="ui header">Comments ( {{ post.comments.length }} )</h3>
-    @each(comment in post.comments)
-        <p><b>{{ comment.poster }} @ {{ comment.postedOn }}</b></p>
-        <p>{{ comment.comment }}</p>
-        <hr>
-    @end
-    @include('comments/commtform')
-@end 
-
+  <h1 class="ui header">
+    {{ post.title }}
+  </h1>
+  <p>
+    {{ post.body }}
+  </p>
+  <hr />
+  <h3 class="ui header">
+    Comments ( {{ post.comments.length }} )
+  </h3>
+  @each(comment in post.comments)
+    {{-- Lab 13 / Lucid version: {{ comment.postedOn }} --}}
+    <p>
+      <b>{{ comment.poster }} {{ comment.createdAt }}</b>
+    </p>
+    <p>
+      {{ comment.comment }}
+    </p>
+    <hr />
+  @end
+  @include('comments/commtform')
+@end
 

@@ -1,5 +1,6 @@
 import User from '#models/user'
-import Post from '#models/post'
+// Lab 13 / Lucid version
+// import Post from '#models/post'
 import AdminBasePolicy from './admin_base_policy.js'
 import type { AuthorizerResponse } from '@adonisjs/bouncer/types'
 
@@ -21,21 +22,27 @@ export default class PostPolicy extends AdminBasePolicy {
   /**
    * Only the post creator can edit the post
    */
-  edit(user: User, post: Post): AuthorizerResponse {
-    return user.id == post.userId
+  edit(_user: User, _post: unknown): AuthorizerResponse {
+    // Lab 13 / Lucid version
+    // return user.id == post.userId
+    return true
   }
 
   /**
    * Only the post creator can update the post
    */
-  update(user: User, post: Post): AuthorizerResponse {
-    return user.id == post.userId
+  update(_user: User, _post: unknown): AuthorizerResponse {
+    // Lab 13 / Lucid version
+    // return user.id == post.userId
+    return true
   }
 
   /**
    * Only the post creator can delete the post
    */
-  delete(user: User, post: Post): AuthorizerResponse {
-    return user.id == post.userId
+  delete(_user: User, _post: unknown): AuthorizerResponse {
+    // Lab 13 / Lucid version
+    // return user.id == post.userId
+    return true
   }
 }

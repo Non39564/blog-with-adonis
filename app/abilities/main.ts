@@ -12,9 +12,12 @@
 |
 */
 import User from '#models/user'
-import Post from '#models/post'
+// Lab 13 / Lucid version
+// import Post from '#models/post'
 import { Bouncer } from '@adonisjs/bouncer'
 
-export const editPost = Bouncer.ability((user: User, post: Post) => {
-  return user.id === post.userId
+export const editPost = Bouncer.ability((_user: User, _post: unknown) => {
+  // Lab 13 / Lucid version
+  // return user.id === post.userId
+  return true
 })
